@@ -1,6 +1,7 @@
 package net.goldtreeservers.worldguardextraflags.wg.wrappers;
 
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.bukkit.BukkitPlayer;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -9,10 +10,13 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.session.MoveType;
 import com.sk89q.worldguard.session.Session;
 import com.sk89q.worldguard.session.handler.Handler;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Objects;
 import java.util.Set;
 
 public abstract class HandlerWrapper extends Handler {
@@ -38,12 +42,12 @@ public abstract class HandlerWrapper extends Handler {
         return null;
     }
 
-    @Override
+    //@Override
     public void initialize(LocalPlayer localPlayer, com.sk89q.worldedit.util.Location current, ApplicableRegionSet set) {
-        this.initialize(((BukkitPlayer)localPlayer).getPlayer(), BukkitAdapter.adapt(current), set);
+        this.initialize(((BukkitPlayer)localPlayer).getPlayer(), adaptLoc(current), set);
     }
 
-    @Override
+    // @Override
     public boolean onCrossBoundary(LocalPlayer localPlayer, com.sk89q.worldedit.util.Location from, com.sk89q.worldedit.util.Location to, ApplicableRegionSet toSet, Set<ProtectedRegion> entered, Set<ProtectedRegion> exited, MoveType moveType) {
         //It turns out that this is fired every time player moves
         //The plugin flags assume already that nothing changes unless region is crossed, so ignore when there isn't a region change
@@ -52,21 +56,42 @@ public abstract class HandlerWrapper extends Handler {
             return true;
         }
 
-        return this.onCrossBoundary(((BukkitPlayer)localPlayer).getPlayer(), BukkitAdapter.adapt(from), BukkitAdapter.adapt(to), toSet, entered, exited, moveType);
+        return this.onCrossBoundary(((BukkitPlayer)localPlayer).getPlayer(), adaptLoc(from), adaptLoc(to), toSet, entered, exited, moveType);
     }
 
-    @Override
+    // @Override
     public void tick(LocalPlayer localPlayer, ApplicableRegionSet set) {
         this.tick(((BukkitPlayer)localPlayer).getPlayer(), set);
     }
 
-    @Override
+    // @Override
     public State getInvincibility(LocalPlayer localPlayer) {
         return this.getInvincibility(((BukkitPlayer)localPlayer).getPlayer());
     }
 
-    public Plugin getPlugin() {
+    public Plugin getHandlerPlugin() {
         return this.plugin;
+    }
+
+    // Method body taken from WorldEdit
+    private static Location adaptLoc(com.sk89q.worldedit.util.Location location) {
+        Vector position = location.toVector();
+        return new Location(adaptWorld((com.sk89q.worldedit.world.World) location.getExtent()), position.getX(), position.getY(), position.getZ(), location.getYaw(), location.getPitch());
+    }
+
+    // Method body taken from WorldEdit
+    private static World adaptWorld(com.sk89q.worldedit.world.World world) {
+        Objects.requireNonNull(world);
+        if (world instanceof BukkitWorld) {
+            return ((BukkitWorld) world).getWorld();
+        } else {
+            World match = Bukkit.getServer().getWorld(world.getName());
+            if (match != null) {
+                return match;
+            } else {
+                throw new IllegalArgumentException("Can't find a Bukkit world for " + world.getName());
+            }
+        }
     }
 
     public abstract static class Factory<T extends HandlerWrapper> extends Handler.Factory<T> {

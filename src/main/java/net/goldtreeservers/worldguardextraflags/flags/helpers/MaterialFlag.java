@@ -3,7 +3,6 @@ package net.goldtreeservers.worldguardextraflags.flags.helpers;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.FlagContext;
 import com.sk89q.worldguard.protection.flags.InvalidFlagFormat;
-import net.goldtreeservers.worldguardextraflags.utils.SupportedFeatures;
 import org.bukkit.Material;
 
 public class MaterialFlag extends Flag<Material> {
@@ -28,12 +27,6 @@ public class MaterialFlag extends Flag<Material> {
 
     @Override
     public Material unmarshal(Object o) {
-        Material material = Material.matchMaterial(o.toString());
-        //Fallback to legacy on unmarshal only
-        if (material == null && SupportedFeatures.isNewMaterial()) {
-            material = Material.matchMaterial(o.toString(), true);
-        }
-
-        return material;
+        return Material.matchMaterial(o.toString());
     }
 }

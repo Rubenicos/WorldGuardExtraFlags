@@ -67,7 +67,7 @@ public class GodmodeFlagHandler extends HandlerWrapper {
         }
 
         //For now at least
-        Plugin essentials = this.getPlugin().getServer().getPluginManager().getPlugin("Essentials");
+        Plugin essentials = this.getHandlerPlugin().getServer().getPluginManager().getPlugin("Essentials");
         if (essentials != null) {
             User user = ((Essentials)essentials).getUser(player);
 

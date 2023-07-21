@@ -61,7 +61,7 @@ public class ConsoleCommandOnExitFlagHandler extends HandlerWrapper {
         for(Set<String> commands_ : this.lastCommands) {
             if (!commands.contains(commands_)) {
                 for(String command : commands_) {
-                    this.getPlugin().getServer().dispatchCommand(this.getPlugin().getServer().getConsoleSender(), command.substring(1).replace("%username%", player.getName())); //TODO: Make this better
+                    this.getHandlerPlugin().getServer().dispatchCommand(this.getHandlerPlugin().getServer().getConsoleSender(), command.substring(1).replace("%username%", player.getName())); //TODO: Make this better
                 }
 
                 break;

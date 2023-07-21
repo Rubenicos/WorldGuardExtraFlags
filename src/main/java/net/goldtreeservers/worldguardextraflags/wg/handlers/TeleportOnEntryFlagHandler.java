@@ -38,7 +38,7 @@ public class TeleportOnEntryFlagHandler extends HandlerWrapper {
     @Override
     public boolean onCrossBoundary(Player player, Location from, Location to, ApplicableRegionSet toSet, Set<ProtectedRegion> entered, Set<ProtectedRegion> exited, MoveType moveType) {
         Object location = WorldGuardUtils.queryValueUnchecked(player, to.getWorld(), entered, Flags.TELEPORT_ON_ENTRY);
-        if (location != null && WorldGuardUtils.hasNoTeleportLoop(this.getPlugin(), player, location)) {
+        if (location != null && WorldGuardUtils.hasNoTeleportLoop(this.getHandlerPlugin(), player, location)) {
             player.teleport(WorldEditUtils.toLocation(location));
         }
 

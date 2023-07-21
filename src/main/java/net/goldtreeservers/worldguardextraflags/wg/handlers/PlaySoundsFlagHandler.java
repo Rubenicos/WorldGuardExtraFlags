@@ -84,7 +84,7 @@ public class PlaySoundsFlagHandler extends HandlerWrapper {
 
                     this.runnables.put(sound.getSound(), runnable);
 
-                    runnable.runTaskTimer(this.getPlugin(), 0L, sound.getInterval());
+                    runnable.runTaskTimer(this.getHandlerPlugin(), 0L, sound.getInterval());
                 }
             }
         }

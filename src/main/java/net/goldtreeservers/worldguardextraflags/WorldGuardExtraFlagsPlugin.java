@@ -8,24 +8,15 @@ import net.goldtreeservers.worldguardextraflags.fawe.FAWEHelper;
 import net.goldtreeservers.worldguardextraflags.flags.Flags;
 import net.goldtreeservers.worldguardextraflags.listeners.*;
 import net.goldtreeservers.worldguardextraflags.protocollib.ProtocolLibHelper;
-import net.goldtreeservers.worldguardextraflags.utils.SupportedFeatures;
 import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
-import net.goldtreeservers.worldguardextraflags.wg.wrappers.WorldGuardCommunicator;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.v6.WorldGuardSixCommunicator;
-import net.goldtreeservers.worldguardextraflags.wg.wrappers.v7.WorldGuardSevenCommunicator;
 import org.bukkit.World;
-import org.bukkit.block.BlockState;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
-import org.bukkit.event.world.PortalCreateEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
 
 public class WorldGuardExtraFlagsPlugin extends AbstractWorldGuardExtraFlagsPlugin {
     private static WorldGuardExtraFlagsPlugin plugin;
@@ -50,10 +41,7 @@ public class WorldGuardExtraFlagsPlugin extends AbstractWorldGuardExtraFlagsPlug
         this.worldEditPlugin = (WorldEditPlugin)this.getServer().getPluginManager().getPlugin("WorldEdit");
         this.worldGuardPlugin = (WorldGuardPlugin)this.getServer().getPluginManager().getPlugin("WorldGuard");
 
-        this.worldGuardCommunicator = WorldGuardExtraFlagsPlugin.createWorldGuardCommunicator();
-        if (this.worldGuardCommunicator == null) {
-            throw new RuntimeException("Unsupported WorldGuard version: " + this.worldGuardPlugin.getDescription().getVersion());
-        }
+        this.worldGuardCommunicator = new WorldGuardSixCommunicator();
 
         WorldGuardUtils.setCommunicator(this.worldGuardCommunicator);
 
@@ -112,23 +100,13 @@ public class WorldGuardExtraFlagsPlugin extends AbstractWorldGuardExtraFlagsPlug
         }
 
         try {
+            //LOL, Just making it look nice xD
             if (EntityToggleGlideEvent.class != null) {
-                //LOL, Just making it look nice xD
                 this.getServer().getPluginManager().registerEvents(new EntityListenerOnePointNine(this), this);
             }
         } catch (NoClassDefFoundError ignored) { }
 
-        try {
-            ParameterizedType type = (ParameterizedType)PortalCreateEvent.class.getDeclaredField("blocks").getGenericType();
-            Class<?> clazz = (Class<?>)type.getActualTypeArguments()[0];
-            if (clazz == BlockState.class) {
-                this.getServer().getPluginManager().registerEvents(new net.goldtreeservers.worldguardextraflags.spigot1_14.EntityListener(this), this);
-            } else {
-                this.getServer().getPluginManager().registerEvents(new EntityListener(this), this);
-            }
-        } catch (Throwable t) {
-            this.getServer().getPluginManager().registerEvents(new EntityListener(this), this);
-        }
+        this.getServer().getPluginManager().registerEvents(new EntityListener(this), this);
 
         if (this.faweHelper != null) {
             this.faweHelper.onEnable();
@@ -142,8 +120,6 @@ public class WorldGuardExtraFlagsPlugin extends AbstractWorldGuardExtraFlagsPlug
 
         if (this.protocolLibHelper != null) {
             this.protocolLibHelper.onEnable();
-        } else if (SupportedFeatures.isPotionEffectEventSupported()) {
-            this.getServer().getPluginManager().registerEvents(new EntityPotionEffectEventListener(this), this);
         }
 
         for (World world : this.getServer().getWorlds()) {
@@ -157,29 +133,10 @@ public class WorldGuardExtraFlagsPlugin extends AbstractWorldGuardExtraFlagsPlug
         for (Field field : Flags.class.getFields()) {
             try {
                 flags.add((Flag<?>)field.get(null));
-            } catch (IllegalArgumentException | IllegalAccessException e) { }
+            } catch (IllegalArgumentException | IllegalAccessException ignored) { }
         }
 
         return flags;
-    }
-
-    public static WorldGuardCommunicator createWorldGuardCommunicator() {
-        try {
-            Class.forName("com.sk89q.worldguard.WorldGuard"); //Only exists in WG 7
-
-            return new WorldGuardSevenCommunicator();
-        } catch (Throwable ignored) { }
-
-        try {
-            Class<?> clazz = Class.forName("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
-            if (clazz.getMethod("getFlagRegistry") != null) {
-                return new WorldGuardSixCommunicator();
-            }
-        } catch (Throwable ignored) {
-            ignored.printStackTrace();
-        }
-
-        return null;
     }
 
     public WorldGuardPlugin getWorldGuardPlugin() {

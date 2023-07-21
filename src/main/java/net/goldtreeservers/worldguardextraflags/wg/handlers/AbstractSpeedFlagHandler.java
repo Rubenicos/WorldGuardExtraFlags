@@ -15,7 +15,6 @@ import java.util.Set;
 
 public abstract class AbstractSpeedFlagHandler extends HandlerWrapper {
 
-
     private Float originalSpeed;
     private DoubleFlag flag;
 

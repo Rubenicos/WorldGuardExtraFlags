@@ -3,19 +3,15 @@ package net.goldtreeservers.worldguardextraflags.utils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.potion.PotionEffect;
 
 /**
  * Helper class to decide what features are supported by the server
  */
-@SuppressWarnings("deprecation")
 public class SupportedFeatures {
     private static boolean frostwalkerSupported;
     private static boolean stopSoundSupported;
-    private static boolean potionEffectEventSupported;
     private static boolean potionEffectParticles;
-    private static boolean newMaterial;
 
     static {
         try {
@@ -27,15 +23,7 @@ public class SupportedFeatures {
         } catch (Throwable ignored) { }
 
         try {
-            SupportedFeatures.potionEffectEventSupported = EntityPotionEffectEvent.class != null;
-        } catch (Throwable ignored) { }
-
-        try {
             SupportedFeatures.potionEffectParticles = PotionEffect.class.getDeclaredMethod("hasParticles") != null;
-        } catch (Throwable ignored) { }
-
-        try {
-            SupportedFeatures.newMaterial = Material.LEGACY_AIR != null;
         } catch (Throwable ignored) { }
     }
 
@@ -47,15 +35,7 @@ public class SupportedFeatures {
         return SupportedFeatures.stopSoundSupported;
     }
 
-    public static boolean isPotionEffectEventSupported() {
-        return SupportedFeatures.potionEffectEventSupported;
-    }
-
     public static boolean isPotionEffectParticles() {
         return SupportedFeatures.potionEffectParticles;
-    }
-
-    public static boolean isNewMaterial() {
-        return SupportedFeatures.newMaterial;
     }
 }

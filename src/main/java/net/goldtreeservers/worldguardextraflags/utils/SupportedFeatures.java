@@ -10,58 +10,34 @@ import org.bukkit.potion.PotionEffect;
  * Helper class to decide what features are supported by the server
  */
 @SuppressWarnings("deprecation")
-public class SupportedFeatures
-{
-	private static boolean frostwalkerSupported;
-	private static boolean stopSoundSupported;
-	private static boolean potionEffectEventSupported;
-	private static boolean potionEffectParticles;
-	private static boolean newMaterial;
-	
-	static
-	{
-		try
-		{
-			SupportedFeatures.frostwalkerSupported = Material.FROSTED_ICE != null;
-		}
-		catch (Throwable ignored)
-		{
-		}
+public class SupportedFeatures {
+    private static boolean frostwalkerSupported;
+    private static boolean stopSoundSupported;
+    private static boolean potionEffectEventSupported;
+    private static boolean potionEffectParticles;
+    private static boolean newMaterial;
 
-		try
-		{
-			SupportedFeatures.stopSoundSupported = Player.class.getDeclaredMethod("stopSound", Sound.class) != null;
-		}
-		catch (Throwable ignored)
-		{
-		}
+    static {
+        try {
+            SupportedFeatures.frostwalkerSupported = Material.FROSTED_ICE != null;
+        } catch (Throwable ignored) { }
 
-		try
-		{
-			SupportedFeatures.potionEffectEventSupported = EntityPotionEffectEvent.class != null;
-		}
-		catch (Throwable ignored)
-		{
-		}
-		
-		try
-		{
-			SupportedFeatures.potionEffectParticles = PotionEffect.class.getDeclaredMethod("hasParticles") != null;
-		}
-		catch(Throwable ignored)
-		{
-			
-		}
-		
-		try
-		{
-			SupportedFeatures.newMaterial = Material.LEGACY_AIR != null;
-		}
-		catch(Throwable ignored)
-		{
-			
-		}
-	}
+        try {
+            SupportedFeatures.stopSoundSupported = Player.class.getDeclaredMethod("stopSound", Sound.class) != null;
+        } catch (Throwable ignored) { }
+
+        try {
+            SupportedFeatures.potionEffectEventSupported = EntityPotionEffectEvent.class != null;
+        } catch (Throwable ignored) { }
+
+        try {
+            SupportedFeatures.potionEffectParticles = PotionEffect.class.getDeclaredMethod("hasParticles") != null;
+        } catch (Throwable ignored) { }
+
+        try {
+            SupportedFeatures.newMaterial = Material.LEGACY_AIR != null;
+        } catch (Throwable ignored) { }
+    }
 
     public static boolean isFrostwalkerSupported() {
         return SupportedFeatures.frostwalkerSupported;

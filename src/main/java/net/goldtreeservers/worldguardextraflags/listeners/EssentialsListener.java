@@ -17,10 +17,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 
-public class EssentialsListener implements Listener
-{
-	private final WorldGuardExtraFlagsPlugin plugin;
-	private final Essentials essentialsPlugin;
+public class EssentialsListener implements Listener {
+    private final WorldGuardExtraFlagsPlugin plugin;
+    private final Essentials essentialsPlugin;
 
     public EssentialsListener(WorldGuardExtraFlagsPlugin plugin, Essentials essentialsPlugin) {
         this.plugin = plugin;
@@ -28,38 +27,34 @@ public class EssentialsListener implements Listener
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onGodStatusChangeEvent(GodStatusChangeEvent event)
-	{
-		IUser user = event.getAffected();
-		Player player = user.getBase();
-		
-		ApplicableRegionSet regions = this.plugin.getWorldGuardCommunicator().getRegionContainer().createQuery().getApplicableRegions(player.getLocation());
-		
-		State state = WorldGuardUtils.queryState(player, player.getWorld(), regions.getRegions(), Flags.GODMODE);
-		if (state != null)
-		{
-			if (this.plugin.getWorldGuardCommunicator().getSessionManager().get(player).getHandler(GodmodeFlagHandler.class).getIsGodmodeEnabled() != null)
-			{
-				event.setCancelled(true);
-			}
-		}
-	}
+    public void onGodStatusChangeEvent(GodStatusChangeEvent event)
+    {
+        IUser user = event.getAffected();
+        Player player = user.getBase();
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onPlayerChangedWorldEvent(PlayerChangedWorldEvent event)
-	{
-		Player player = event.getPlayer();
-		
-		if (player.getGameMode() != GameMode.CREATIVE && !this.essentialsPlugin.getUser(player).isAuthorized("essentials.fly"))
-		{
-			//Essentials now turns off flight, fuck him
-			Boolean value = this.plugin.getWorldGuardCommunicator().getSessionManager().get(player).getHandler(FlyFlagHandler.class).getCurrentValue();
-			if (value != null)
-			{
-				player.setAllowFlight(value);
-			}
-		}
-	}
+        ApplicableRegionSet regions = this.plugin.getWorldGuardCommunicator().getRegionContainer().createQuery().getApplicableRegions(player.getLocation());
+
+        State state = WorldGuardUtils.queryState(player, player.getWorld(), regions.getRegions(), Flags.GODMODE);
+        if (state != null) {
+            if (this.plugin.getWorldGuardCommunicator().getSessionManager().get(player).getHandler(GodmodeFlagHandler.class).getIsGodmodeEnabled() != null) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerChangedWorldEvent(PlayerChangedWorldEvent event)
+    {
+        Player player = event.getPlayer();
+
+        if (player.getGameMode() != GameMode.CREATIVE && !this.essentialsPlugin.getUser(player).isAuthorized("essentials.fly")) {
+            //Essentials now turns off flight, fuck him
+            Boolean value = this.plugin.getWorldGuardCommunicator().getSessionManager().get(player).getHandler(FlyFlagHandler.class).getCurrentValue();
+            if (value != null) {
+                player.setAllowFlight(value);
+            }
+        }
+    }
 
     public WorldGuardExtraFlagsPlugin getPlugin() {
         return this.plugin;

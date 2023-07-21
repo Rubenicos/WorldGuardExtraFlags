@@ -15,38 +15,31 @@ import net.goldtreeservers.worldguardextraflags.flags.Flags;
 import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
 import org.bukkit.Bukkit;
 
-public class WorldEditFlagHandler extends AbstractDelegateExtent
-{
-	protected final org.bukkit.World world;
-	protected final org.bukkit.entity.Player player;
-	
-	protected WorldEditFlagHandler(World world, Extent extent, Player player)
-	{
-		super(extent);
+public class WorldEditFlagHandler extends AbstractDelegateExtent {
+    protected final org.bukkit.World world;
+    protected final org.bukkit.entity.Player player;
 
-		if (world instanceof BukkitWorld)
-		{
-			this.world = ((BukkitWorld)world).getWorld();
-		}
-		else
-		{
-			this.world = Bukkit.getWorld(world.getName());
-		}
-		
-		this.player = Bukkit.getPlayer(player.getUniqueId());
-	}
+    protected WorldEditFlagHandler(World world, Extent extent, Player player) {
+        super(extent);
 
-	@Override
-    public boolean setBlock(Vector location, BaseBlock block) throws WorldEditException
-    {
-    	ApplicableRegionSet regions = WorldGuardPlugin.inst().getRegionContainer().get(this.world).getApplicableRegions(location);
-    	
-    	State state = WorldGuardUtils.queryState(this.player, this.world, regions.getRegions(), Flags.WORLDEDIT);
-    	if (state != State.DENY)
-    	{
-    		return super.setBlock(location, block);
-    	}
-    	
-    	return false;
+        if (world instanceof BukkitWorld) {
+            this.world = ((BukkitWorld)world).getWorld();
+        } else {
+            this.world = Bukkit.getWorld(world.getName());
+        }
+
+        this.player = Bukkit.getPlayer(player.getUniqueId());
+    }
+
+    @Override
+    public boolean setBlock(Vector location, BaseBlock block) throws WorldEditException {
+        ApplicableRegionSet regions = WorldGuardPlugin.inst().getRegionContainer().get(this.world).getApplicableRegions(location);
+
+        State state = WorldGuardUtils.queryState(this.player, this.world, regions.getRegions(), Flags.WORLDEDIT);
+        if (state != State.DENY) {
+            return super.setBlock(location, block);
+        }
+
+        return false;
     }
 }

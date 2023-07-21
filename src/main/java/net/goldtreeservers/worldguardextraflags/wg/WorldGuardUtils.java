@@ -17,111 +17,94 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-public class WorldGuardUtils
-{
-	public static final String PREVENT_TELEPORT_LOOP_META = "WGEFP: TLP";
-	
-	private static WorldGuardCommunicator communicator;
-	
-	private static LocalPlayer wrapPlayer(Player player)
-	{
-		return WorldGuardUtils.getCommunicator().wrapPlayer(player);
-	}
-	
-	public static boolean hasBypass(Player player, World world, ProtectedRegion region, Flag<?> flag)
-	{
-		if (player.hasMetadata("NPC"))
-		{
-			return true;
-		}
-		
-		//Permission system that supports wildcars is really helpful here :)
-		if (player.hasPermission("worldguard.region.bypass." + world.getName() + "." + region.getId() + "." + flag.getName()))
-		{
-			return true;
-		}
-		
-		return false;
-	}
+public class WorldGuardUtils {
+    public static final String PREVENT_TELEPORT_LOOP_META = "WGEFP: TLP";
 
-	public static State queryState(Player player, World world, Set<ProtectedRegion> regions, StateFlag flag)
-	{
-		return WorldGuardUtils.createFlagValueCalculator(player, world, regions, flag).queryState(WorldGuardUtils.wrapPlayer(player), flag);
-	}
-	
-	public static <T> T queryValue(Player player, World world, Set<ProtectedRegion> regions, Flag<T> flag)
-	{
-		return WorldGuardUtils.createFlagValueCalculator(player, world, regions, flag).queryValue(WorldGuardUtils.wrapPlayer(player), flag);
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Object queryValueUnchecked(Player player, World world, Set<ProtectedRegion> regions, Flag flag)
-	{
-		return WorldGuardUtils.createFlagValueCalculator(player, world, regions, flag).queryValue(WorldGuardUtils.wrapPlayer(player), flag);
-	}
-	
-	public static <T> Collection<T> queryAllValues(Player player, World world, Set<ProtectedRegion> regions, Flag<T> flag)
-	{
-		return WorldGuardUtils.createFlagValueCalculator(player, world, regions, flag).queryAllValues(WorldGuardUtils.wrapPlayer(player), flag);
-	}
-	
-	public static <T> FlagValueCalculator createFlagValueCalculator(Player player, World world, Set<ProtectedRegion> regions, Flag<T> flag)
-	{
-		List<ProtectedRegion> checkForRegions = new ArrayList<>();
-		for(ProtectedRegion region : regions)
-		{
-			if (!WorldGuardUtils.hasBypass(player, world, region, flag))
-			{
-				checkForRegions.add(region);
-			}
-		}
-		
-		NormativeOrders.sort(checkForRegions);
-		
-		ProtectedRegion global = WorldGuardUtils.getCommunicator().getRegionContainer().get(world).getRegion(ProtectedRegion.GLOBAL_REGION);
-		if (global != null) //Global region can be null
-		{
-			if (WorldGuardUtils.hasBypass(player, world, global, flag)) //Lets do like this for now to reduce dublicated code
-			{
-				global = null;
-			}
-		}
-		
-		return new FlagValueCalculator(checkForRegions, global);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static boolean hasNoTeleportLoop(Plugin plugin, Player player, Object location)
-	{
-		MetadataValue result = player.getMetadata(WorldGuardUtils.PREVENT_TELEPORT_LOOP_META).stream()
-				.filter((p) -> p.getOwningPlugin().equals(plugin))
-				.findFirst()
-				.orElse(null);
-		
-		if (result == null)
-		{
-			result = new FixedMetadataValue(plugin, new HashSet<>());
-			
-			player.setMetadata(WorldGuardUtils.PREVENT_TELEPORT_LOOP_META, result);
-			
-			new BukkitRunnable()
-			{
-				@Override
-				public void run()
-				{
-					player.removeMetadata(WorldGuardUtils.PREVENT_TELEPORT_LOOP_META, plugin);
-				}
-			}.runTask(plugin);
-		}
-		
-		Set<Object> set = (Set<Object>)result.value();
-		if (set.add(location))
-		{
-			return true;
-		}
-		
-		return false;
-	}
+    private static WorldGuardCommunicator communicator;
+
+    private static LocalPlayer wrapPlayer(Player player) {
+        return WorldGuardUtils.getCommunicator().wrapPlayer(player);
+    }
+
+    public static boolean hasBypass(Player player, World world, ProtectedRegion region, Flag<?> flag) {
+        if (player.hasMetadata("NPC")) {
+            return true;
+        }
+
+        //Permission system that supports wildcars is really helpful here :)
+        if (player.hasPermission("worldguard.region.bypass." + world.getName() + "." + region.getId() + "." + flag.getName())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static State queryState(Player player, World world, Set<ProtectedRegion> regions, StateFlag flag) {
+        return WorldGuardUtils.createFlagValueCalculator(player, world, regions, flag).queryState(WorldGuardUtils.wrapPlayer(player), flag);
+    }
+
+    public static <T> T queryValue(Player player, World world, Set<ProtectedRegion> regions, Flag<T> flag) {
+        return WorldGuardUtils.createFlagValueCalculator(player, world, regions, flag).queryValue(WorldGuardUtils.wrapPlayer(player), flag);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public static Object queryValueUnchecked(Player player, World world, Set<ProtectedRegion> regions, Flag flag) {
+        return WorldGuardUtils.createFlagValueCalculator(player, world, regions, flag).queryValue(WorldGuardUtils.wrapPlayer(player), flag);
+    }
+
+    public static <T> Collection<T> queryAllValues(Player player, World world, Set<ProtectedRegion> regions, Flag<T> flag) {
+        return WorldGuardUtils.createFlagValueCalculator(player, world, regions, flag).queryAllValues(WorldGuardUtils.wrapPlayer(player), flag);
+    }
+
+    public static <T> FlagValueCalculator createFlagValueCalculator(Player player, World world, Set<ProtectedRegion> regions, Flag<T> flag) {
+        List<ProtectedRegion> checkForRegions = new ArrayList<>();
+        for(ProtectedRegion region : regions) {
+            if (!WorldGuardUtils.hasBypass(player, world, region, flag)) {
+                checkForRegions.add(region);
+            }
+        }
+
+        NormativeOrders.sort(checkForRegions);
+
+        ProtectedRegion global = WorldGuardUtils.getCommunicator().getRegionContainer().get(world).getRegion(ProtectedRegion.GLOBAL_REGION);
+        //Global region can be null
+        if (global != null) {
+            //Lets do like this for now to reduce dublicated code
+            if (WorldGuardUtils.hasBypass(player, world, global, flag)) {
+                global = null;
+            }
+        }
+
+        return new FlagValueCalculator(checkForRegions, global);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static boolean hasNoTeleportLoop(Plugin plugin, Player player, Object location) {
+        MetadataValue result = player.getMetadata(WorldGuardUtils.PREVENT_TELEPORT_LOOP_META).stream()
+                .filter((p) -> p.getOwningPlugin().equals(plugin))
+                .findFirst()
+                .orElse(null);
+
+        if (result == null) {
+            result = new FixedMetadataValue(plugin, new HashSet<>());
+
+            player.setMetadata(WorldGuardUtils.PREVENT_TELEPORT_LOOP_META, result);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.removeMetadata(WorldGuardUtils.PREVENT_TELEPORT_LOOP_META, plugin);
+                }
+            }.runTask(plugin);
+        }
+
+        Set<Object> set = (Set<Object>) result.value();
+        if (set.add(location)) {
+            return true;
+        }
+
+        return false;
+    }
 
     public static WorldGuardCommunicator getCommunicator() {
         return WorldGuardUtils.communicator;

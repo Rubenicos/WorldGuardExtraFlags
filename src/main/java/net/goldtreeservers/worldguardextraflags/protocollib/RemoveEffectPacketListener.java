@@ -8,38 +8,29 @@ import net.goldtreeservers.worldguardextraflags.WorldGuardExtraFlagsPlugin;
 import net.goldtreeservers.worldguardextraflags.wg.handlers.GiveEffectsFlagHandler;
 import org.bukkit.entity.Player;
 
-public class RemoveEffectPacketListener extends PacketAdapter
-{
-	public RemoveEffectPacketListener()
-	{
-		super(WorldGuardExtraFlagsPlugin.getPlugin(), PacketType.Play.Server.REMOVE_ENTITY_EFFECT);
-	}
-	
-	@Override
-	public void onPacketSending(PacketEvent event)
-	{
-		if (!event.isCancelled())
-		{
-			Player player = event.getPlayer();
-			if (!player.isValid()) //Work around, getIfPresent is broken inside WG due to using LocalPlayer as key instead of CacheKey
-			{
-				return;
-			}
+public class RemoveEffectPacketListener extends PacketAdapter {
 
-			try
-			{
-				Session session = WorldGuardExtraFlagsPlugin.getPlugin().getWorldGuardCommunicator().getSessionManager().get(player);
-				
-				GiveEffectsFlagHandler giveEffectsHandler = session.getHandler(GiveEffectsFlagHandler.class);
-				if (giveEffectsHandler.isSupressRemovePotionPacket())
-				{
-					event.setCancelled(true);
-				}
-			}
-			catch(IllegalStateException wgBug)
-			{
-				
-			}
-		}
-	}
+    public RemoveEffectPacketListener() {
+        super(WorldGuardExtraFlagsPlugin.getPlugin(), PacketType.Play.Server.REMOVE_ENTITY_EFFECT);
+    }
+
+    @Override
+    public void onPacketSending(PacketEvent event) {
+        if (!event.isCancelled()) {
+            Player player = event.getPlayer();
+            //Work around, getIfPresent is broken inside WG due to using LocalPlayer as key instead of CacheKey
+            if (!player.isValid()) {
+                return;
+            }
+
+            try {
+                Session session = WorldGuardExtraFlagsPlugin.getPlugin().getWorldGuardCommunicator().getSessionManager().get(player);
+
+                GiveEffectsFlagHandler giveEffectsHandler = session.getHandler(GiveEffectsFlagHandler.class);
+                if (giveEffectsHandler.isSupressRemovePotionPacket()) {
+                    event.setCancelled(true);
+                }
+            } catch(IllegalStateException ignored) { }
+        }
+    }
 }

@@ -9,33 +9,29 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 
-public class WorldListener implements Listener
-{
-	private final WorldGuardExtraFlagsPlugin plugin;
+public class WorldListener implements Listener {
+    private final WorldGuardExtraFlagsPlugin plugin;
 
     public WorldListener(WorldGuardExtraFlagsPlugin plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-	public void onWorldLoadEvent(WorldLoadEvent event)
-	{
-		World world = event.getWorld();
-		
-		this.plugin.getWorldGuardCommunicator().doUnloadChunkFlagCheck(world);
-	}
+    public void onWorldLoadEvent(WorldLoadEvent event) {
+        World world = event.getWorld();
 
-	@EventHandler(ignoreCancelled = true)
-	public void onChunkUnloadEvent(ChunkUnloadEvent event)
-	{
-		World world = event.getWorld();
-		Chunk chunk = event.getChunk();
-		
-		if (!this.plugin.getWorldGuardCommunicator().doUnloadChunkFlagCheck(world, chunk))
-		{
-			event.setCancelled(true);
-		}
-	}
+        this.plugin.getWorldGuardCommunicator().doUnloadChunkFlagCheck(world);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onChunkUnloadEvent(ChunkUnloadEvent event) {
+        World world = event.getWorld();
+        Chunk chunk = event.getChunk();
+
+        if (!this.plugin.getWorldGuardCommunicator().doUnloadChunkFlagCheck(world, chunk)) {
+            event.setCancelled(true);
+        }
+    }
 
     public WorldGuardExtraFlagsPlugin getPlugin() {
         return this.plugin;

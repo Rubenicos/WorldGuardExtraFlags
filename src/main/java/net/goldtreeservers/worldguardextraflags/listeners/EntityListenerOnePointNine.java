@@ -11,57 +11,49 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 
-public class EntityListenerOnePointNine implements Listener
-{
-	private final WorldGuardExtraFlagsPlugin plugin;
+public class EntityListenerOnePointNine implements Listener {
+    private final WorldGuardExtraFlagsPlugin plugin;
 
     public EntityListenerOnePointNine(WorldGuardExtraFlagsPlugin plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler(ignoreCancelled = true)
-	public void onEntityToggleGlideEvent(EntityToggleGlideEvent event)
-	{
-		Entity entity = event.getEntity();
-		if (entity instanceof Player)
-		{
-			Player player = (Player)entity;
-			
-			ApplicableRegionSet regions = this.plugin.getWorldGuardCommunicator().getRegionContainer().createQuery().getApplicableRegions(player.getLocation());
+    public void onEntityToggleGlideEvent(EntityToggleGlideEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof Player) {
+            Player player = (Player)entity;
 
-			ForcedState state = WorldGuardUtils.queryValue(player, player.getWorld(), regions.getRegions(), Flags.GLIDE);
-			switch(state)
-			{
-				case ALLOW:
-					break;
-				case DENY:
-				{
-					if (!event.isGliding())
-					{
-						return;
-					}
+            ApplicableRegionSet regions = this.plugin.getWorldGuardCommunicator().getRegionContainer().createQuery().getApplicableRegions(player.getLocation());
 
-					event.setCancelled(true);
-					
-					//Prevent the player from being allowed to glide by spamming space
-					player.teleport(player.getLocation());
-					
-					break;
-				}
-				case FORCE:
-				{
-					if (event.isGliding())
-					{
-						return;
-					}
+            ForcedState state = WorldGuardUtils.queryValue(player, player.getWorld(), regions.getRegions(), Flags.GLIDE);
+            switch (state) {
+                case ALLOW:
+                    break;
+                case DENY: {
+                    if (!event.isGliding()) {
+                        return;
+                    }
 
-					event.setCancelled(true);
-					
-					break;
-				}
-			}
-		}
-	}
+                    event.setCancelled(true);
+
+                    //Prevent the player from being allowed to glide by spamming space
+                    player.teleport(player.getLocation());
+
+                    break;
+                }
+                case FORCE: {
+                    if (event.isGliding()) {
+                        return;
+                    }
+
+                    event.setCancelled(true);
+
+                    break;
+                }
+            }
+        }
+    }
 
     public WorldGuardExtraFlagsPlugin getPlugin() {
         return this.plugin;

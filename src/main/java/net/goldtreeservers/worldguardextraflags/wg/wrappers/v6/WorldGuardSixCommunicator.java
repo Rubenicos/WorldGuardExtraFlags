@@ -20,102 +20,84 @@ import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public class WorldGuardSixCommunicator implements WorldGuardCommunicator
-{
-	private AbstractSessionManagerWrapper sessionManager;
-	private AbstractRegionContainerWrapper regionContainer;
-	
-	@Override
-	public void onLoad(Plugin plugin) throws Exception
-	{
-		WorldGuardCommunicator.super.onLoad(plugin);
-	}
+public class WorldGuardSixCommunicator implements WorldGuardCommunicator {
+    private AbstractSessionManagerWrapper sessionManager;
+    private AbstractRegionContainerWrapper regionContainer;
 
-	@Override
-	public void onEnable(Plugin plugin) throws Exception
-	{
-		this.sessionManager = new SessionManagerWrapper(WorldGuardPlugin.inst().getSessionManager());
-		this.regionContainer = new RegionContainerWrapper();
-		
-		WorldGuardCommunicator.super.onEnable(plugin);
-	}
+    @Override
+    public void onLoad(Plugin plugin) throws Exception {
+        WorldGuardCommunicator.super.onLoad(plugin);
+    }
 
-	@Override
-	public boolean isLegacy()
-	{
-		return true;
-	}
+    @Override
+    public void onEnable(Plugin plugin) throws Exception {
+        this.sessionManager = new SessionManagerWrapper(WorldGuardPlugin.inst().getSessionManager());
+        this.regionContainer = new RegionContainerWrapper();
 
-	@Override
-	public FlagRegistry getFlagRegistry()
-	{
-		return WorldGuardPlugin.inst().getFlagRegistry();
-	}
+        WorldGuardCommunicator.super.onEnable(plugin);
+    }
 
-	@Override
-	public AbstractSessionManagerWrapper getSessionManager()
-	{
-		return this.sessionManager;
-	}
+    @Override
+    public boolean isLegacy() {
+        return true;
+    }
 
-	@Override
-	public AbstractRegionContainerWrapper getRegionContainer() 
-	{
-		return this.regionContainer;
-	}
+    @Override
+    public FlagRegistry getFlagRegistry() {
+        return WorldGuardPlugin.inst().getFlagRegistry();
+    }
 
-	@Override
-	public LocalPlayer wrapPlayer(Player player)
-	{
-		return WorldGuardPlugin.inst().wrapPlayer(player);
-	}
+    @Override
+    public AbstractSessionManagerWrapper getSessionManager() {
+        return this.sessionManager;
+    }
 
-	@Override
-	public <T> SetFlag<T> getCustomSetFlag(String name, Flag<T> flag)
-	{
-		return new CustomSetFlag<T>(name, flag);
-	}
+    @Override
+    public AbstractRegionContainerWrapper getRegionContainer() {
+        return this.regionContainer;
+    }
 
-	@Override
-	public AbstractDelegateExtent getWorldEditFlag(World world, Extent extent, com.sk89q.worldedit.entity.Player player)
-	{
-		return new WorldEditFlagHandler(world, extent, player);
-	}
+    @Override
+    public LocalPlayer wrapPlayer(Player player) {
+        return WorldGuardPlugin.inst().wrapPlayer(player);
+    }
 
-	@Override
-	public void doUnloadChunkFlagCheck(org.bukkit.World world)
-	{
-		for (ProtectedRegion region : this.getRegionContainer().get(world).getRegions().values())
-		{
-			if (region.getFlag(Flags.CHUNK_UNLOAD) == State.DENY)
-			{
-				System.out.println("Loading chunks for region " + region.getId() + " located in " + world.getName() + " due to chunk-unload flag being deny");
-				
-				BlockVector min = region.getMinimumPoint();
-				BlockVector max = region.getMaximumPoint();
+    @Override
+    public <T> SetFlag<T> getCustomSetFlag(String name, Flag<T> flag) {
+        return new CustomSetFlag<T>(name, flag);
+    }
 
-				for(int x = min.getBlockX() >> 4; x <= max.getBlockX() >> 4; x++)
-				{
-					for(int z = min.getBlockZ() >> 4; z <= max.getBlockZ() >> 4; z++)
-					{
-						world.getChunkAt(x, z).load(true);
-					}
-				}
-			}
-		}
-	}
+    @Override
+    public AbstractDelegateExtent getWorldEditFlag(World world, Extent extent, com.sk89q.worldedit.entity.Player player) {
+        return new WorldEditFlagHandler(world, extent, player);
+    }
 
-	@Override
-	public boolean doUnloadChunkFlagCheck(org.bukkit.World world, Chunk chunk) 
-	{
-		for (ProtectedRegion region : this.getRegionContainer().get(world).getApplicableRegions(new ProtectedCuboidRegion("UnloadChunkFlagTester", new BlockVector(chunk.getX() * 16, 0, chunk.getZ() * 16), new BlockVector(chunk.getX() * 16 + 15, 256, chunk.getZ() * 16 + 15))))
-		{
-			if (region.getFlag(Flags.CHUNK_UNLOAD) == State.DENY)
-			{
-				return false;
-			}
-		}
-		
-		return true;
-	}
+    @Override
+    public void doUnloadChunkFlagCheck(org.bukkit.World world) {
+        for (ProtectedRegion region : this.getRegionContainer().get(world).getRegions().values()) {
+            if (region.getFlag(Flags.CHUNK_UNLOAD) == State.DENY) {
+                System.out.println("Loading chunks for region " + region.getId() + " located in " + world.getName() + " due to chunk-unload flag being deny");
+
+                BlockVector min = region.getMinimumPoint();
+                BlockVector max = region.getMaximumPoint();
+
+                for (int x = min.getBlockX() >> 4; x <= max.getBlockX() >> 4; x++) {
+                    for (int z = min.getBlockZ() >> 4; z <= max.getBlockZ() >> 4; z++) {
+                        world.getChunkAt(x, z).load(true);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean doUnloadChunkFlagCheck(org.bukkit.World world, Chunk chunk) {
+        for (ProtectedRegion region : this.getRegionContainer().get(world).getApplicableRegions(new ProtectedCuboidRegion("UnloadChunkFlagTester", new BlockVector(chunk.getX() * 16, 0, chunk.getZ() * 16), new BlockVector(chunk.getX() * 16 + 15, 256, chunk.getZ() * 16 + 15)))) {
+            if (region.getFlag(Flags.CHUNK_UNLOAD) == State.DENY) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -19,10 +19,9 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
-public class GiveEffectsFlagHandler extends HandlerWrapper
-{
-	public static final Factory FACTORY(Plugin plugin)
-	{
+public class GiveEffectsFlagHandler extends HandlerWrapper {
+
+	public static final Factory FACTORY(Plugin plugin) {
 		return new Factory(plugin);
 	}
 
@@ -49,8 +48,7 @@ public class GiveEffectsFlagHandler extends HandlerWrapper
     
     private boolean supressRemovePotionPacket;
     
-	protected GiveEffectsFlagHandler(Plugin plugin, Session session)
-	{
+	protected GiveEffectsFlagHandler(Plugin plugin, Session session) {
 		super(plugin, session);
 		
 		this.removedEffects = new HashMap<>();
@@ -58,39 +56,30 @@ public class GiveEffectsFlagHandler extends HandlerWrapper
 	}
 	
 	@Override
-	public void initialize(Player player, Location current, ApplicableRegionSet set)
-	{
+	public void initialize(Player player, Location current, ApplicableRegionSet set) {
 		this.check(player, set);
     }
 	
 	@Override
-	public boolean onCrossBoundary(Player player, Location from, Location to, ApplicableRegionSet toSet, Set<ProtectedRegion> entered, Set<ProtectedRegion> exited, MoveType moveType)
-	{
+	public boolean onCrossBoundary(Player player, Location from, Location to, ApplicableRegionSet toSet, Set<ProtectedRegion> entered, Set<ProtectedRegion> exited, MoveType moveType) {
 		this.check(player, toSet);
 		
 		return true;
 	}
 	
 	@Override
-	public void tick(Player player, ApplicableRegionSet set)
-	{
+	public void tick(Player player, ApplicableRegionSet set) {
 		this.check(player, set);
 	}
 	
-	private void check(Player player, ApplicableRegionSet set)
-	{
+	private void check(Player player, ApplicableRegionSet set) {
 		Set<PotionEffect> potionEffects = WorldGuardUtils.queryValue(player, player.getWorld(), set.getRegions(), Flags.GIVE_EFFECTS);
-		if (potionEffects != null && potionEffects.size() > 0)
-		{
-			try
-			{
-				for (PotionEffect effect : potionEffects)
-				{
+		if (potionEffects != null && potionEffects.size() > 0) {
+			try {
+				for (PotionEffect effect : potionEffects) {
 					PotionEffect effect_ = null;
-					for(PotionEffect activeEffect : player.getActivePotionEffects())
-					{
-						if (activeEffect.getType().equals(effect.getType()))
-						{
+					for(PotionEffect activeEffect : player.getActivePotionEffects()) {
+						if (activeEffect.getType().equals(effect.getType())) {
 							effect_ = activeEffect;
 							break;
 						}
@@ -98,8 +87,7 @@ public class GiveEffectsFlagHandler extends HandlerWrapper
 					
 					this.supressRemovePotionPacket = effect_ != null && effect_.getAmplifier() == effect.getAmplifier();
 	
-					if (this.givenEffects.add(effect.getType()) && effect_ != null)
-					{
+					if (this.givenEffects.add(effect.getType()) && effect_ != null) {
 						this.removedEffects.put(effect_.getType(), new PotionEffectDetails(System.nanoTime() + (long)(effect_.getDuration() / 20D * TimeUnit.SECONDS.toNanos(1L)), effect_.getAmplifier(), effect_.isAmbient(), SupportedFeatures.isPotionEffectParticles() ? effect_.hasParticles() : true));
 						
 						player.removePotionEffect(effect_.getType());
@@ -108,31 +96,25 @@ public class GiveEffectsFlagHandler extends HandlerWrapper
 					player.addPotionEffect(effect, true);
 				}
 			}
-			finally
-			{
+			finally {
 				this.supressRemovePotionPacket = false;
 			}
 		}
 		
 		Iterator<PotionEffectType> effectTypes = this.givenEffects.iterator();
-		while (effectTypes.hasNext())
-		{
+		while (effectTypes.hasNext()) {
 			PotionEffectType type = effectTypes.next();
 			
-			if (potionEffects != null && potionEffects.size() > 0)
-			{
+			if (potionEffects != null && potionEffects.size() > 0) {
 				boolean skip = false;
-				for (PotionEffect effect : potionEffects)
-				{
-					if (effect.getType().equals(type))
-					{
+				for (PotionEffect effect : potionEffects) {
+					if (effect.getType().equals(type)) {
 						skip = true;
 						break;
 					}
 				}
 				
-				if (skip)
-				{
+				if (skip) {
 					continue;
 				}
 			}
@@ -143,24 +125,18 @@ public class GiveEffectsFlagHandler extends HandlerWrapper
 		}
 		
 		Iterator<Entry<PotionEffectType, PotionEffectDetails>> potionEffects_ = this.removedEffects.entrySet().iterator();
-		while (potionEffects_.hasNext())
-		{
+		while (potionEffects_.hasNext()) {
 			Entry<PotionEffectType, PotionEffectDetails> effect = potionEffects_.next();
-			if (!this.givenEffects.contains(effect.getKey()))
-			{
+			if (!this.givenEffects.contains(effect.getKey())) {
 				PotionEffectDetails removedEffect = effect.getValue();
-				if (removedEffect != null)
-				{
+				if (removedEffect != null) {
 					int timeLeft = removedEffect.getTimeLeftInTicks();
 					
-					if (timeLeft > 0)
-					{
-						if (SupportedFeatures.isPotionEffectParticles())
-						{
+					if (timeLeft > 0) {
+						if (SupportedFeatures.isPotionEffectParticles()) {
 							player.addPotionEffect(new PotionEffect(effect.getKey(), timeLeft, removedEffect.getAmplifier(), removedEffect.isAmbient(), removedEffect.isParticles()), true);
 						}
-						else
-						{
+						else {
 							player.addPotionEffect(new PotionEffect(effect.getKey(), timeLeft, removedEffect.getAmplifier(), removedEffect.isAmbient()), true);
 						}
 					}
@@ -171,17 +147,14 @@ public class GiveEffectsFlagHandler extends HandlerWrapper
 		}
 	}
 	
-	public void drinkMilk(Player player)
-	{
+	public void drinkMilk(Player player) {
 		this.removedEffects.clear();
 
 		this.check(player, WorldGuardUtils.getCommunicator().getRegionContainer().createQuery().getApplicableRegions(player.getLocation()));
 	}
 	
-	public void drinkPotion(Player player, Collection<PotionEffect> effects)
-	{
-		for(PotionEffect effect : effects)
-		{
+	public void drinkPotion(Player player, Collection<PotionEffect> effects) {
+		for(PotionEffect effect : effects) {
 			this.removedEffects.put(effect.getType(), new PotionEffectDetails(System.nanoTime() + (long)(effect.getDuration() / 20D * TimeUnit.SECONDS.toNanos(1L)), effect.getAmplifier(), effect.isAmbient(), SupportedFeatures.isPotionEffectParticles() ? effect.hasParticles() : true));
 		}
 		

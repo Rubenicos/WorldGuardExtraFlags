@@ -9,54 +9,43 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 
-public class EntityPotionEffectEventListener implements Listener
-{
-	private final WorldGuardExtraFlagsPlugin plugin;
+public class EntityPotionEffectEventListener implements Listener {
+    private final WorldGuardExtraFlagsPlugin plugin;
 
     public EntityPotionEffectEventListener(WorldGuardExtraFlagsPlugin plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler(ignoreCancelled = true)
-	public void onEntityPotionEffectEvent(EntityPotionEffectEvent event)
-	{
-		if (event.getAction() != EntityPotionEffectEvent.Action.REMOVED)
-		{
-			return;
-		}
-		
-		if (event.getCause() != EntityPotionEffectEvent.Cause.PLUGIN)
-		{
-			return;
-		}
-		
-		Entity entity = event.getEntity();
-		if (!(entity instanceof Player))
-		{
-			return;
-		}
+    public void onEntityPotionEffectEvent(EntityPotionEffectEvent event) {
+        if (event.getAction() != EntityPotionEffectEvent.Action.REMOVED) {
+            return;
+        }
 
-		Player player = (Player)entity;
-		if (!player.isValid()) //Work around, getIfPresent is broken inside WG due to using LocalPlayer as key instead of CacheKey
-		{
-			return;
-		}
+        if (event.getCause() != EntityPotionEffectEvent.Cause.PLUGIN) {
+            return;
+        }
 
-		try
-		{
-			Session session = WorldGuardExtraFlagsPlugin.getPlugin().getWorldGuardCommunicator().getSessionManager().get(player);
-			
-			GiveEffectsFlagHandler giveEffectsHandler = session.getHandler(GiveEffectsFlagHandler.class);
-			if (giveEffectsHandler.isSupressRemovePotionPacket())
-			{
-				event.setCancelled(true);
-			}
-		}
-		catch(IllegalStateException wgBug)
-		{
-			
-		}
-	}
+        Entity entity = event.getEntity();
+        if (!(entity instanceof Player)) {
+            return;
+        }
+
+        Player player = (Player)entity;
+        //Work around, getIfPresent is broken inside WG due to using LocalPlayer as key instead of CacheKey
+        if (!player.isValid()) {
+            return;
+        }
+
+        try {
+            Session session = WorldGuardExtraFlagsPlugin.getPlugin().getWorldGuardCommunicator().getSessionManager().get(player);
+
+            GiveEffectsFlagHandler giveEffectsHandler = session.getHandler(GiveEffectsFlagHandler.class);
+            if (giveEffectsHandler.isSupressRemovePotionPacket()) {
+                event.setCancelled(true);
+            }
+        } catch(IllegalStateException ignored) { }
+    }
 
     public WorldGuardExtraFlagsPlugin getPlugin() {
         return this.plugin;

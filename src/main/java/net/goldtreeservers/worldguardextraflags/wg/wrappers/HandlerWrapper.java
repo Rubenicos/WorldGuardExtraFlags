@@ -15,79 +15,66 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Set;
 
-public abstract class HandlerWrapper extends Handler
-{
-	private final Plugin plugin;
-	
-	protected HandlerWrapper(Plugin plugin, Session session)
-	{
-		super(session);
-		
-		this.plugin = plugin;
-	}
-	
-	public void initialize(Player player, Location current, ApplicableRegionSet set)
-	{
-	}
-	
-	public boolean onCrossBoundary(Player player, Location from, Location to, ApplicableRegionSet toSet, Set<ProtectedRegion> entered, Set<ProtectedRegion> exited, MoveType moveType)
-	{
-		return true;
-	}
-	
-	public void tick(Player player, ApplicableRegionSet set)
-	{
-	}
+public abstract class HandlerWrapper extends Handler {
+    private final Plugin plugin;
 
-    public State getInvincibility(Player player)
-    {
-		return null;
+    protected HandlerWrapper(Plugin plugin, Session session) {
+        super(session);
+
+        this.plugin = plugin;
     }
-	
-	@Override
-	public void initialize(LocalPlayer localPlayer, com.sk89q.worldedit.util.Location current, ApplicableRegionSet set)
-	{
-		this.initialize(((BukkitPlayer)localPlayer).getPlayer(), BukkitAdapter.adapt(current), set);
-	}
-	
-	@Override
-	public boolean onCrossBoundary(LocalPlayer localPlayer, com.sk89q.worldedit.util.Location from, com.sk89q.worldedit.util.Location to, ApplicableRegionSet toSet, Set<ProtectedRegion> entered, Set<ProtectedRegion> exited, MoveType moveType)
-	{
-		//It turns out that this is fired every time player moves
-		//The plugin flags assume already that nothing changes unless region is crossed, so ignore when there isn't a region change
-		//This optimization is already in place in the FVCH
-		if (entered.isEmpty() && exited.isEmpty() && from.getExtent().equals(to.getExtent()))
-		{
+
+    public void initialize(Player player, Location current, ApplicableRegionSet set) {
+    }
+
+    public boolean onCrossBoundary(Player player, Location from, Location to, ApplicableRegionSet toSet, Set<ProtectedRegion> entered, Set<ProtectedRegion> exited, MoveType moveType) {
+        return true;
+    }
+
+    public void tick(Player player, ApplicableRegionSet set) {
+    }
+
+    public State getInvincibility(Player player) {
+        return null;
+    }
+
+    @Override
+    public void initialize(LocalPlayer localPlayer, com.sk89q.worldedit.util.Location current, ApplicableRegionSet set) {
+        this.initialize(((BukkitPlayer)localPlayer).getPlayer(), BukkitAdapter.adapt(current), set);
+    }
+
+    @Override
+    public boolean onCrossBoundary(LocalPlayer localPlayer, com.sk89q.worldedit.util.Location from, com.sk89q.worldedit.util.Location to, ApplicableRegionSet toSet, Set<ProtectedRegion> entered, Set<ProtectedRegion> exited, MoveType moveType) {
+        //It turns out that this is fired every time player moves
+        //The plugin flags assume already that nothing changes unless region is crossed, so ignore when there isn't a region change
+        //This optimization is already in place in the FVCH
+        if (entered.isEmpty() && exited.isEmpty() && from.getExtent().equals(to.getExtent())) {
             return true;
         }
-		
-		return this.onCrossBoundary(((BukkitPlayer)localPlayer).getPlayer(), BukkitAdapter.adapt(from), BukkitAdapter.adapt(to), toSet, entered, exited, moveType);
-	}
-	
-	@Override
-	public void tick(LocalPlayer localPlayer, ApplicableRegionSet set)
-	{
-		this.tick(((BukkitPlayer)localPlayer).getPlayer(), set);
-	}
-	
-	@Override
-	public State getInvincibility(LocalPlayer localPlayer)
-	{
-		return this.getInvincibility(((BukkitPlayer)localPlayer).getPlayer());
-	}
+
+        return this.onCrossBoundary(((BukkitPlayer)localPlayer).getPlayer(), BukkitAdapter.adapt(from), BukkitAdapter.adapt(to), toSet, entered, exited, moveType);
+    }
+
+    @Override
+    public void tick(LocalPlayer localPlayer, ApplicableRegionSet set) {
+        this.tick(((BukkitPlayer)localPlayer).getPlayer(), set);
+    }
+
+    @Override
+    public State getInvincibility(LocalPlayer localPlayer) {
+        return this.getInvincibility(((BukkitPlayer)localPlayer).getPlayer());
+    }
 
     public Plugin getPlugin() {
         return this.plugin;
     }
 
-    public abstract static class Factory<T extends HandlerWrapper> extends Handler.Factory<T>
-	{
-		private final Plugin plugin;
-		
-		public Factory(Plugin plugin)
-		{
-			this.plugin = plugin;
-		}
+    public abstract static class Factory<T extends HandlerWrapper> extends Handler.Factory<T> {
+        private final Plugin plugin;
+
+        public Factory(Plugin plugin) {
+            this.plugin = plugin;
+        }
 
         public Plugin getPlugin() {
             return this.plugin;

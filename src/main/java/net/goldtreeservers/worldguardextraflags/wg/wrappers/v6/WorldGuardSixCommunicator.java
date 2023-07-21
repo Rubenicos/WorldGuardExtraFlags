@@ -1,9 +1,5 @@
 package net.goldtreeservers.worldguardextraflags.wg.wrappers.v6;
 
-import org.bukkit.Chunk;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.extent.AbstractDelegateExtent;
 import com.sk89q.worldedit.extent.Extent;
@@ -16,11 +12,13 @@ import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-
 import net.goldtreeservers.worldguardextraflags.flags.Flags;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.AbstractRegionContainerWrapper;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.AbstractSessionManagerWrapper;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.WorldGuardCommunicator;
+import org.bukkit.Chunk;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public class WorldGuardSixCommunicator implements WorldGuardCommunicator
 {

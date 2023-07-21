@@ -1,16 +1,13 @@
 package net.goldtreeservers.worldguardextraflags.protocollib;
 
-import org.bukkit.plugin.Plugin;
-
 import com.comphenix.protocol.ProtocolLibrary;
-
-import lombok.Getter;
 import net.goldtreeservers.worldguardextraflags.WorldGuardExtraFlagsPlugin;
+import org.bukkit.plugin.Plugin;
 
 public class ProtocolLibHelper
 {
-	@Getter private final WorldGuardExtraFlagsPlugin plugin;
-	@Getter private final Plugin protocolLibPlugin;
+	private final WorldGuardExtraFlagsPlugin plugin;
+	private final Plugin protocolLibPlugin;
 	
 	public ProtocolLibHelper(WorldGuardExtraFlagsPlugin plugin, Plugin protocolLibPlugin)
 	{
@@ -22,4 +19,12 @@ public class ProtocolLibHelper
 	{
 		ProtocolLibrary.getProtocolManager().addPacketListener(new RemoveEffectPacketListener());
 	}
+
+    public WorldGuardExtraFlagsPlugin getPlugin() {
+        return this.plugin;
+    }
+
+    public Plugin getProtocolLibPlugin() {
+        return this.protocolLibPlugin;
+    }
 }

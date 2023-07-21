@@ -1,5 +1,6 @@
 package net.goldtreeservers.worldguardextraflags.listeners;
 
+import net.goldtreeservers.worldguardextraflags.WorldGuardExtraFlagsPlugin;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
@@ -8,16 +9,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import net.goldtreeservers.worldguardextraflags.WorldGuardExtraFlagsPlugin;
-
-@RequiredArgsConstructor
 public class WorldListener implements Listener
 {
-	@Getter private final WorldGuardExtraFlagsPlugin plugin;
-	
-	@EventHandler(priority = EventPriority.MONITOR)
+	private final WorldGuardExtraFlagsPlugin plugin;
+
+    public WorldListener(WorldGuardExtraFlagsPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
 	public void onWorldLoadEvent(WorldLoadEvent event)
 	{
 		World world = event.getWorld();
@@ -36,4 +36,8 @@ public class WorldListener implements Listener
 			event.setCancelled(true);
 		}
 	}
+
+    public WorldGuardExtraFlagsPlugin getPlugin() {
+        return this.plugin;
+    }
 }

@@ -1,27 +1,35 @@
 package net.goldtreeservers.worldguardextraflags.essentials;
 
-import org.bukkit.plugin.Plugin;
-
 import com.earth2me.essentials.Essentials;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.goldtreeservers.worldguardextraflags.WorldGuardExtraFlagsPlugin;
 import net.goldtreeservers.worldguardextraflags.listeners.EssentialsListener;
+import org.bukkit.plugin.Plugin;
 
-@RequiredArgsConstructor
 public class EssentialsHelper
 {
-	@Getter private final WorldGuardExtraFlagsPlugin plugin;
-	@Getter private final Essentials essentialsPlugin;
+	private final WorldGuardExtraFlagsPlugin plugin;
+	private final Essentials essentialsPlugin;
 	
 	public EssentialsHelper(WorldGuardExtraFlagsPlugin plugin, Plugin essentialsPlugin)
 	{
 		this(plugin, (Essentials)essentialsPlugin);
 	}
-	
-	public void onEnable()
+
+    public EssentialsHelper(WorldGuardExtraFlagsPlugin plugin, Essentials essentialsPlugin) {
+        this.plugin = plugin;
+        this.essentialsPlugin = essentialsPlugin;
+    }
+
+    public void onEnable()
 	{
 		this.plugin.getServer().getPluginManager().registerEvents(new EssentialsListener(this.plugin, this.essentialsPlugin), this.plugin);
 	}
+
+    public WorldGuardExtraFlagsPlugin getPlugin() {
+        return this.plugin;
+    }
+
+    public Essentials getEssentialsPlugin() {
+        return this.essentialsPlugin;
+    }
 }

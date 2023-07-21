@@ -1,12 +1,12 @@
 package net.goldtreeservers.worldguardextraflags.wg.wrappers.v6;
 
-import java.util.Set;
-
 import com.google.common.collect.Sets;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.FlagContext;
 import com.sk89q.worldguard.protection.flags.InvalidFlagFormat;
 import com.sk89q.worldguard.protection.flags.SetFlag;
+
+import java.util.Set;
 
 public class CustomSetFlag<T> extends SetFlag<T>
 {

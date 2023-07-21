@@ -1,22 +1,22 @@
 package net.goldtreeservers.worldguardextraflags.wg.wrappers;
 
-import java.util.Map;
-
-import org.bukkit.Location;
-
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import org.bukkit.Location;
 
-import lombok.RequiredArgsConstructor;
+import java.util.Map;
 
-@RequiredArgsConstructor
 public abstract class AbstractRegionManagerWrapper
 {
 	protected final RegionManager regionManager;
 
-	public ProtectedRegion getRegion(String id)
+    public AbstractRegionManagerWrapper(RegionManager regionManager) {
+        this.regionManager = regionManager;
+    }
+
+    public ProtectedRegion getRegion(String id)
 	{
 		return this.regionManager.getRegion(id);
 	}

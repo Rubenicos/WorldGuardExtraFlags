@@ -1,11 +1,13 @@
 package net.goldtreeservers.worldguardextraflags;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
-import lombok.Getter;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.WorldGuardCommunicator;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class AbstractWorldGuardExtraFlagsPlugin extends JavaPlugin
 {
-	@Getter protected WorldGuardCommunicator worldGuardCommunicator;
+	protected WorldGuardCommunicator worldGuardCommunicator;
+
+	public WorldGuardCommunicator getWorldGuardCommunicator() {
+		return this.worldGuardCommunicator;
+	}
 }

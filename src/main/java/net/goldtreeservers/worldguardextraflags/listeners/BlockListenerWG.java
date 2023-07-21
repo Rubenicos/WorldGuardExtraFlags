@@ -3,8 +3,6 @@ package net.goldtreeservers.worldguardextraflags.listeners;
 import com.sk89q.worldguard.bukkit.event.block.BreakBlockEvent;
 import com.sk89q.worldguard.bukkit.event.block.PlaceBlockEvent;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.goldtreeservers.worldguardextraflags.WorldGuardExtraFlagsPlugin;
 import net.goldtreeservers.worldguardextraflags.flags.Flags;
 import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
@@ -18,12 +16,15 @@ import org.bukkit.event.Listener;
 
 import java.util.Set;
 
-@RequiredArgsConstructor
 public class BlockListenerWG implements Listener
 {
-	@Getter private final WorldGuardExtraFlagsPlugin plugin;
+	private final WorldGuardExtraFlagsPlugin plugin;
 
-	//TODO: Figure out something better for this
+    public BlockListenerWG(WorldGuardExtraFlagsPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    //TODO: Figure out something better for this
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onBlockPlaceEvent(PlaceBlockEvent event)
 	{
@@ -104,4 +105,8 @@ public class BlockListenerWG implements Listener
 			}
 		}
 	}
+
+    public WorldGuardExtraFlagsPlugin getPlugin() {
+        return this.plugin;
+    }
 }

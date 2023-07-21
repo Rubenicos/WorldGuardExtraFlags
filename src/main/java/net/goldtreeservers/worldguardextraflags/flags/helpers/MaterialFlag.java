@@ -1,12 +1,10 @@
 package net.goldtreeservers.worldguardextraflags.flags.helpers;
 
-import org.bukkit.Material;
-
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.FlagContext;
 import com.sk89q.worldguard.protection.flags.InvalidFlagFormat;
-
 import net.goldtreeservers.worldguardextraflags.utils.SupportedFeatures;
+import org.bukkit.Material;
 
 public class MaterialFlag extends Flag<Material>
 {

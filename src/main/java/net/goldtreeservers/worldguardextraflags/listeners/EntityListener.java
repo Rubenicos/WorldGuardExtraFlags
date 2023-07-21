@@ -1,24 +1,23 @@
 package net.goldtreeservers.worldguardextraflags.listeners;
 
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
+import net.goldtreeservers.worldguardextraflags.WorldGuardExtraFlagsPlugin;
+import net.goldtreeservers.worldguardextraflags.flags.Flags;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.PortalCreateEvent;
 
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.flags.StateFlag.State;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import net.goldtreeservers.worldguardextraflags.WorldGuardExtraFlagsPlugin;
-import net.goldtreeservers.worldguardextraflags.flags.Flags;
-
-@RequiredArgsConstructor
 public class EntityListener implements Listener
 {
-	@Getter private final WorldGuardExtraFlagsPlugin plugin;
-	
-	@EventHandler(ignoreCancelled = true)
+	private final WorldGuardExtraFlagsPlugin plugin;
+
+    public EntityListener(WorldGuardExtraFlagsPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler(ignoreCancelled = true)
 	public void onPortalCreateEvent(PortalCreateEvent event)
 	{
 		for(Block block : event.getBlocks())
@@ -33,4 +32,8 @@ public class EntityListener implements Listener
 			}
 		}
 	}
+
+    public WorldGuardExtraFlagsPlugin getPlugin() {
+        return this.plugin;
+    }
 }

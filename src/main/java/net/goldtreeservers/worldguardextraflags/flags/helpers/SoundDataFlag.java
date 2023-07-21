@@ -3,7 +3,6 @@ package net.goldtreeservers.worldguardextraflags.flags.helpers;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.FlagContext;
 import com.sk89q.worldguard.protection.flags.InvalidFlagFormat;
-
 import net.goldtreeservers.worldguardextraflags.flags.data.SoundData;
 
 public class SoundDataFlag extends Flag<SoundData>

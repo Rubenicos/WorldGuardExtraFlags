@@ -1,14 +1,12 @@
 package net.goldtreeservers.worldguardextraflags.protocollib;
 
-import org.bukkit.entity.Player;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.sk89q.worldguard.session.Session;
-
 import net.goldtreeservers.worldguardextraflags.WorldGuardExtraFlagsPlugin;
 import net.goldtreeservers.worldguardextraflags.wg.handlers.GiveEffectsFlagHandler;
+import org.bukkit.entity.Player;
 
 public class RemoveEffectPacketListener extends PacketAdapter
 {

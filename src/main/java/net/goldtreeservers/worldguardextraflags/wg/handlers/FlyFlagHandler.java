@@ -1,21 +1,18 @@
 package net.goldtreeservers.worldguardextraflags.wg.handlers;
 
-import java.util.Set;
-
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.session.MoveType;
 import com.sk89q.worldguard.session.Session;
-
-import lombok.Getter;
 import net.goldtreeservers.worldguardextraflags.flags.Flags;
 import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.HandlerWrapper;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import java.util.Set;
 
 public class FlyFlagHandler extends HandlerWrapper
 {
@@ -23,7 +20,11 @@ public class FlyFlagHandler extends HandlerWrapper
 	{
 		return new Factory(plugin);
 	}
-	
+
+    public Boolean getCurrentValue() {
+        return this.currentValue;
+    }
+
     public static class Factory extends HandlerWrapper.Factory<FlyFlagHandler>
     {
         public Factory(Plugin plugin)
@@ -38,7 +39,7 @@ public class FlyFlagHandler extends HandlerWrapper
         }
     }
 
-    @Getter private Boolean currentValue;
+    private Boolean currentValue;
     private Boolean originalFly;
 	    
 	protected FlyFlagHandler(Plugin plugin, Session session)

@@ -1,11 +1,5 @@
 package net.goldtreeservers.worldguardextraflags.wg.wrappers;
 
-import java.util.Set;
-
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.bukkit.BukkitPlayer;
@@ -15,12 +9,15 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.session.MoveType;
 import com.sk89q.worldguard.session.Session;
 import com.sk89q.worldguard.session.handler.Handler;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
-import lombok.Getter;
+import java.util.Set;
 
 public abstract class HandlerWrapper extends Handler
 {
-	@Getter private final Plugin plugin;
+	private final Plugin plugin;
 	
 	protected HandlerWrapper(Plugin plugin, Session session)
 	{
@@ -78,14 +75,22 @@ public abstract class HandlerWrapper extends Handler
 	{
 		return this.getInvincibility(((BukkitPlayer)localPlayer).getPlayer());
 	}
-	
-	public abstract static class Factory<T extends HandlerWrapper> extends Handler.Factory<T>
+
+    public Plugin getPlugin() {
+        return this.plugin;
+    }
+
+    public abstract static class Factory<T extends HandlerWrapper> extends Handler.Factory<T>
 	{
-		@Getter private final Plugin plugin;
+		private final Plugin plugin;
 		
 		public Factory(Plugin plugin)
 		{
 			this.plugin = plugin;
 		}
-	}
+
+        public Plugin getPlugin() {
+            return this.plugin;
+        }
+    }
 }

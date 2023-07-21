@@ -1,11 +1,5 @@
 package net.goldtreeservers.worldguardextraflags.wg.handlers;
 
-import java.util.Set;
-
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -13,11 +7,14 @@ import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.session.MoveType;
 import com.sk89q.worldguard.session.Session;
-
-import lombok.Getter;
 import net.goldtreeservers.worldguardextraflags.flags.Flags;
 import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.HandlerWrapper;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import java.util.Set;
 
 public class GodmodeFlagHandler extends HandlerWrapper
 {
@@ -25,7 +22,11 @@ public class GodmodeFlagHandler extends HandlerWrapper
 	{
 		return new Factory(plugin);
 	}
-	
+
+    public Boolean getIsGodmodeEnabled() {
+        return this.isGodmodeEnabled;
+    }
+
     public static class Factory extends HandlerWrapper.Factory<GodmodeFlagHandler>
     {
         public Factory(Plugin plugin)
@@ -40,7 +41,7 @@ public class GodmodeFlagHandler extends HandlerWrapper
         }
     }
     
-    @Getter private Boolean isGodmodeEnabled;
+    private Boolean isGodmodeEnabled;
     private Boolean originalEssentialsGodmode;
 	    
 	protected GodmodeFlagHandler(Plugin plugin, Session session)

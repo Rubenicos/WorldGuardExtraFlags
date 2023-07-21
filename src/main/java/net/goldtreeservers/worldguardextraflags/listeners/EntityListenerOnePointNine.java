@@ -1,26 +1,25 @@
 package net.goldtreeservers.worldguardextraflags.listeners;
 
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import net.goldtreeservers.worldguardextraflags.WorldGuardExtraFlagsPlugin;
+import net.goldtreeservers.worldguardextraflags.flags.Flags;
+import net.goldtreeservers.worldguardextraflags.flags.helpers.ForcedStateFlag.ForcedState;
+import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import net.goldtreeservers.worldguardextraflags.WorldGuardExtraFlagsPlugin;
-import net.goldtreeservers.worldguardextraflags.flags.Flags;
-import net.goldtreeservers.worldguardextraflags.flags.helpers.ForcedStateFlag.ForcedState;
-import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
-
-@RequiredArgsConstructor
 public class EntityListenerOnePointNine implements Listener
 {
-	@Getter private final WorldGuardExtraFlagsPlugin plugin;
-	
-	@EventHandler(ignoreCancelled = true)
+	private final WorldGuardExtraFlagsPlugin plugin;
+
+    public EntityListenerOnePointNine(WorldGuardExtraFlagsPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler(ignoreCancelled = true)
 	public void onEntityToggleGlideEvent(EntityToggleGlideEvent event)
 	{
 		Entity entity = event.getEntity();
@@ -63,4 +62,8 @@ public class EntityListenerOnePointNine implements Listener
 			}
 		}
 	}
+
+    public WorldGuardExtraFlagsPlugin getPlugin() {
+        return this.plugin;
+    }
 }

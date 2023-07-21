@@ -1,8 +1,7 @@
 package net.goldtreeservers.worldguardextraflags.wg.wrappers;
 
-import org.bukkit.Location;
-
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import org.bukkit.Location;
 
 public abstract class AbstractRegionQueryWrapper
 {

@@ -1,31 +1,23 @@
 package net.goldtreeservers.worldguardextraflags.wg.handlers;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import com.sk89q.worldguard.session.MoveType;
+import com.sk89q.worldguard.session.Session;
+import net.goldtreeservers.worldguardextraflags.flags.Flags;
+import net.goldtreeservers.worldguardextraflags.flags.data.PotionEffectDetails;
+import net.goldtreeservers.worldguardextraflags.utils.SupportedFeatures;
+import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
+import net.goldtreeservers.worldguardextraflags.wg.wrappers.HandlerWrapper;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.sk89q.worldguard.session.MoveType;
-import com.sk89q.worldguard.session.Session;
-
-import lombok.Getter;
-import net.goldtreeservers.worldguardextraflags.flags.Flags;
-import net.goldtreeservers.worldguardextraflags.flags.data.PotionEffectDetails;
-import net.goldtreeservers.worldguardextraflags.utils.SupportedFeatures;
-import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
-import net.goldtreeservers.worldguardextraflags.wg.wrappers.HandlerWrapper;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 public class GiveEffectsFlagHandler extends HandlerWrapper
 {
@@ -33,7 +25,11 @@ public class GiveEffectsFlagHandler extends HandlerWrapper
 	{
 		return new Factory(plugin);
 	}
-	
+
+    public boolean isSupressRemovePotionPacket() {
+        return this.supressRemovePotionPacket;
+    }
+
     public static class Factory extends HandlerWrapper.Factory<GiveEffectsFlagHandler>
     {
         public Factory(Plugin plugin)
@@ -51,7 +47,7 @@ public class GiveEffectsFlagHandler extends HandlerWrapper
 	private Map<PotionEffectType, PotionEffectDetails> removedEffects;
     private Set<PotionEffectType> givenEffects;
     
-    @Getter private boolean supressRemovePotionPacket;
+    private boolean supressRemovePotionPacket;
     
 	protected GiveEffectsFlagHandler(Plugin plugin, Session session)
 	{

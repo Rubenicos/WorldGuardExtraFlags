@@ -1,13 +1,11 @@
 package net.goldtreeservers.worldguardextraflags.wg.wrappers.v6;
 
-import org.bukkit.entity.Player;
-
 import com.sk89q.worldguard.session.Session;
 import com.sk89q.worldguard.session.SessionManager;
 import com.sk89q.worldguard.session.handler.Handler;
 import com.sk89q.worldguard.session.handler.Handler.Factory;
-
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.AbstractSessionManagerWrapper;
+import org.bukkit.entity.Player;
 
 public class SessionManagerWrapper extends AbstractSessionManagerWrapper
 {

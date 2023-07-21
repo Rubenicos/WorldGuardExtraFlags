@@ -1,18 +1,5 @@
 package net.goldtreeservers.worldguardextraflags.wg;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.protection.FlagValueCalculator;
 import com.sk89q.worldguard.protection.flags.Flag;
@@ -20,16 +7,21 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.util.NormativeOrders;
-
-import lombok.Getter;
-import lombok.Setter;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.WorldGuardCommunicator;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.*;
 
 public class WorldGuardUtils
 {
 	public static final String PREVENT_TELEPORT_LOOP_META = "WGEFP: TLP";
 	
-	@Getter @Setter private static WorldGuardCommunicator communicator;
+	private static WorldGuardCommunicator communicator;
 	
 	private static LocalPlayer wrapPlayer(Player player)
 	{
@@ -130,4 +122,12 @@ public class WorldGuardUtils
 		
 		return false;
 	}
+
+    public static WorldGuardCommunicator getCommunicator() {
+        return WorldGuardUtils.communicator;
+    }
+
+    public static void setCommunicator(WorldGuardCommunicator communicator) {
+        WorldGuardUtils.communicator = communicator;
+    }
 }

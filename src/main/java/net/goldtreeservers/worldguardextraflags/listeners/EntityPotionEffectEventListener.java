@@ -1,24 +1,23 @@
 package net.goldtreeservers.worldguardextraflags.listeners;
 
+import com.sk89q.worldguard.session.Session;
+import net.goldtreeservers.worldguardextraflags.WorldGuardExtraFlagsPlugin;
+import net.goldtreeservers.worldguardextraflags.wg.handlers.GiveEffectsFlagHandler;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 
-import com.sk89q.worldguard.session.Session;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import net.goldtreeservers.worldguardextraflags.WorldGuardExtraFlagsPlugin;
-import net.goldtreeservers.worldguardextraflags.wg.handlers.GiveEffectsFlagHandler;
-
-@RequiredArgsConstructor
 public class EntityPotionEffectEventListener implements Listener
 {
-	@Getter private final WorldGuardExtraFlagsPlugin plugin;
-	
-	@EventHandler(ignoreCancelled = true)
+	private final WorldGuardExtraFlagsPlugin plugin;
+
+    public EntityPotionEffectEventListener(WorldGuardExtraFlagsPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler(ignoreCancelled = true)
 	public void onEntityPotionEffectEvent(EntityPotionEffectEvent event)
 	{
 		if (event.getAction() != EntityPotionEffectEvent.Action.REMOVED)
@@ -58,4 +57,8 @@ public class EntityPotionEffectEventListener implements Listener
 			
 		}
 	}
+
+    public WorldGuardExtraFlagsPlugin getPlugin() {
+        return this.plugin;
+    }
 }

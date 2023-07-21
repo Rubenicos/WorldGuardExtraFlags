@@ -1,9 +1,8 @@
 package net.goldtreeservers.worldguardextraflags.flags.helpers;
 
-import org.bukkit.Material;
-
 import com.sk89q.worldguard.protection.flags.FlagContext;
 import com.sk89q.worldguard.protection.flags.InvalidFlagFormat;
+import org.bukkit.Material;
 
 public class BlockMaterialFlag extends MaterialFlag
 {

@@ -1,5 +1,25 @@
 package net.goldtreeservers.worldguardextraflags;
 
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.flags.Flag;
+import net.goldtreeservers.worldguardextraflags.essentials.EssentialsHelper;
+import net.goldtreeservers.worldguardextraflags.fawe.FAWEHelper;
+import net.goldtreeservers.worldguardextraflags.flags.Flags;
+import net.goldtreeservers.worldguardextraflags.listeners.*;
+import net.goldtreeservers.worldguardextraflags.protocollib.ProtocolLibHelper;
+import net.goldtreeservers.worldguardextraflags.utils.SupportedFeatures;
+import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
+import net.goldtreeservers.worldguardextraflags.wg.wrappers.WorldGuardCommunicator;
+import net.goldtreeservers.worldguardextraflags.wg.wrappers.v6.WorldGuardSixCommunicator;
+import net.goldtreeservers.worldguardextraflags.wg.wrappers.v7.WorldGuardSevenCommunicator;
+import org.bstats.bukkit.Metrics;
+import org.bukkit.World;
+import org.bukkit.block.BlockState;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.world.PortalCreateEvent;
+import org.bukkit.plugin.Plugin;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.HashSet;
@@ -8,46 +28,27 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-import net.goldtreeservers.worldguardextraflags.listeners.*;
-import org.bstats.bukkit.Metrics;
-import org.bukkit.World;
-import org.bukkit.block.BlockState;
-import org.bukkit.event.entity.EntityToggleGlideEvent;
-import org.bukkit.event.world.PortalCreateEvent;
-import org.bukkit.plugin.Plugin;
-
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.flags.Flag;
-
-import lombok.Getter;
-import net.goldtreeservers.worldguardextraflags.essentials.EssentialsHelper;
-import net.goldtreeservers.worldguardextraflags.fawe.FAWEHelper;
-import net.goldtreeservers.worldguardextraflags.flags.Flags;
-import net.goldtreeservers.worldguardextraflags.protocollib.ProtocolLibHelper;
-import net.goldtreeservers.worldguardextraflags.utils.SupportedFeatures;
-import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
-import net.goldtreeservers.worldguardextraflags.wg.wrappers.WorldGuardCommunicator;
-import net.goldtreeservers.worldguardextraflags.wg.wrappers.v6.WorldGuardSixCommunicator;
-import net.goldtreeservers.worldguardextraflags.wg.wrappers.v7.WorldGuardSevenCommunicator;
-
 public class WorldGuardExtraFlagsPlugin extends AbstractWorldGuardExtraFlagsPlugin
 {
-	@Getter private static WorldGuardExtraFlagsPlugin plugin;
+	private static WorldGuardExtraFlagsPlugin plugin;
 	
-	@Getter private WorldGuardPlugin worldGuardPlugin;
-	@Getter private WorldEditPlugin worldEditPlugin;
+	private WorldGuardPlugin worldGuardPlugin;
+	private WorldEditPlugin worldEditPlugin;
 
-	@Getter private EssentialsHelper essentialsHelper;
-	@Getter private FAWEHelper faweHelper;
-	@Getter private ProtocolLibHelper protocolLibHelper;
+	private EssentialsHelper essentialsHelper;
+	private FAWEHelper faweHelper;
+	private ProtocolLibHelper protocolLibHelper;
 	
 	public WorldGuardExtraFlagsPlugin()
 	{
 		WorldGuardExtraFlagsPlugin.plugin = this;
 	}
-	
-	@Override
+
+    public static WorldGuardExtraFlagsPlugin getPlugin() {
+        return WorldGuardExtraFlagsPlugin.plugin;
+    }
+
+    @Override
 	public void onLoad()
 	{
 		this.worldEditPlugin = (WorldEditPlugin)this.getServer().getPluginManager().getPlugin("WorldEdit");
@@ -280,4 +281,24 @@ public class WorldGuardExtraFlagsPlugin extends AbstractWorldGuardExtraFlagsPlug
 		
 		return null;
 	}
+
+    public WorldGuardPlugin getWorldGuardPlugin() {
+        return this.worldGuardPlugin;
+    }
+
+    public WorldEditPlugin getWorldEditPlugin() {
+        return this.worldEditPlugin;
+    }
+
+    public EssentialsHelper getEssentialsHelper() {
+        return this.essentialsHelper;
+    }
+
+    public FAWEHelper getFaweHelper() {
+        return this.faweHelper;
+    }
+
+    public ProtocolLibHelper getProtocolLibHelper() {
+        return this.protocolLibHelper;
+    }
 }

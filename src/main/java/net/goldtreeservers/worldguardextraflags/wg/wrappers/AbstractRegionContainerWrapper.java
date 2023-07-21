@@ -1,8 +1,8 @@
 package net.goldtreeservers.worldguardextraflags.wg.wrappers;
 
-import java.util.List;
-
 import org.bukkit.World;
+
+import java.util.List;
 
 public abstract class AbstractRegionContainerWrapper
 {

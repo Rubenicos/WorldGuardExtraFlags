@@ -1,24 +1,12 @@
 package net.goldtreeservers.worldguardextraflags.flags;
 
+import com.sk89q.worldguard.protection.flags.*;
+import net.goldtreeservers.worldguardextraflags.flags.data.SoundData;
+import net.goldtreeservers.worldguardextraflags.flags.helpers.*;
+import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
 import org.bukkit.Material;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import com.sk89q.worldguard.protection.flags.BooleanFlag;
-import com.sk89q.worldguard.protection.flags.CommandStringFlag;
-import com.sk89q.worldguard.protection.flags.DoubleFlag;
-import com.sk89q.worldguard.protection.flags.LocationFlag;
-import com.sk89q.worldguard.protection.flags.SetFlag;
-import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.sk89q.worldguard.protection.flags.StringFlag;
-
-import net.goldtreeservers.worldguardextraflags.flags.data.SoundData;
-import net.goldtreeservers.worldguardextraflags.flags.helpers.BlockMaterialFlag;
-import net.goldtreeservers.worldguardextraflags.flags.helpers.ForcedStateFlag;
-import net.goldtreeservers.worldguardextraflags.flags.helpers.PotionEffectFlag;
-import net.goldtreeservers.worldguardextraflags.flags.helpers.PotionEffectTypeFlag;
-import net.goldtreeservers.worldguardextraflags.flags.helpers.SoundDataFlag;
-import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
 
 public final class Flags
 {

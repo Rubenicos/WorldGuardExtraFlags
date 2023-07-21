@@ -1,15 +1,13 @@
 package net.goldtreeservers.worldguardextraflags.wg.wrappers.v6;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.bukkit.World;
-
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.AbstractRegionContainerWrapper;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.AbstractRegionManagerWrapper;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.AbstractRegionQueryWrapper;
+import org.bukkit.World;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RegionContainerWrapper extends AbstractRegionContainerWrapper
 {

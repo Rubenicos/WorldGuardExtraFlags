@@ -6,19 +6,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.potion.PotionEffect;
 
-import lombok.Getter;
-
 /**
  * Helper class to decide what features are supported by the server
  */
 @SuppressWarnings("deprecation")
 public class SupportedFeatures
 {
-	@Getter private static boolean frostwalkerSupported;
-	@Getter private static boolean stopSoundSupported;
-	@Getter private static boolean potionEffectEventSupported;
-	@Getter private static boolean potionEffectParticles;
-	@Getter private static boolean newMaterial;
+	private static boolean frostwalkerSupported;
+	private static boolean stopSoundSupported;
+	private static boolean potionEffectEventSupported;
+	private static boolean potionEffectParticles;
+	private static boolean newMaterial;
 	
 	static
 	{
@@ -64,4 +62,24 @@ public class SupportedFeatures
 			
 		}
 	}
+
+    public static boolean isFrostwalkerSupported() {
+        return SupportedFeatures.frostwalkerSupported;
+    }
+
+    public static boolean isStopSoundSupported() {
+        return SupportedFeatures.stopSoundSupported;
+    }
+
+    public static boolean isPotionEffectEventSupported() {
+        return SupportedFeatures.potionEffectEventSupported;
+    }
+
+    public static boolean isPotionEffectParticles() {
+        return SupportedFeatures.potionEffectParticles;
+    }
+
+    public static boolean isNewMaterial() {
+        return SupportedFeatures.newMaterial;
+    }
 }

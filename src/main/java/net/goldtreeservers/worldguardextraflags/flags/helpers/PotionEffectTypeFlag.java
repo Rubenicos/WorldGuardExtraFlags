@@ -1,10 +1,9 @@
 package net.goldtreeservers.worldguardextraflags.flags.helpers;
 
-import org.bukkit.potion.PotionEffectType;
-
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.FlagContext;
 import com.sk89q.worldguard.protection.flags.InvalidFlagFormat;
+import org.bukkit.potion.PotionEffectType;
 
 public class PotionEffectTypeFlag extends Flag<PotionEffectType>
 {

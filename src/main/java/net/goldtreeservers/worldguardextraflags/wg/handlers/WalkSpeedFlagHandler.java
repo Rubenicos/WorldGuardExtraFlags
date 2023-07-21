@@ -1,10 +1,8 @@
 package net.goldtreeservers.worldguardextraflags.wg.handlers;
 
 import com.sk89q.worldguard.session.Session;
-
 import net.goldtreeservers.worldguardextraflags.flags.Flags;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.HandlerWrapper;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 

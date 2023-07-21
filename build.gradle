@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    from(sourceSets.main.resources.srcDirs) {
+        include '**/*.yml'
+        expand(project.properties)
+    }
+}
+
+repositories {
+    // SpigotMC
+    maven { url 'https://repo.codemc.io/repository/nms/' }
+    // ProtocolLib
+    maven { url 'https://repo.dmulloy2.net/repository/public/' }
+    // Essentials
+    maven { url 'https://repo.essentialsx.net/releases/' }
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT'
+
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.0.0'
+    compileOnly('net.essentialsx:EssentialsX:2.20.0') { transitive = false }
+    //compileOnly 'com.sk89q:guavabackport:1.2'
+
+    // Fawe
+    // WorldEdit
+    // WorldGuard
+    compileOnly fileTree(dir: 'libs', includes: ['*.jar'])
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+}

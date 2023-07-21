@@ -13,7 +13,6 @@ import net.goldtreeservers.worldguardextraflags.wg.WorldGuardUtils;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.WorldGuardCommunicator;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.v6.WorldGuardSixCommunicator;
 import net.goldtreeservers.worldguardextraflags.wg.wrappers.v7.WorldGuardSevenCommunicator;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.World;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
@@ -150,32 +149,6 @@ public class WorldGuardExtraFlagsPlugin extends AbstractWorldGuardExtraFlagsPlug
         for (World world : this.getServer().getWorlds()) {
             this.getWorldGuardCommunicator().doUnloadChunkFlagCheck(world);
         }
-
-        this.setupMetrics();
-    }
-
-    private void setupMetrics() {
-        final int bStatsPluginId = 7301;
-
-        Metrics metrics = new Metrics(this, bStatsPluginId);
-        metrics.addCustomChart(new Metrics.AdvancedPie("flags_count", new Callable<Map<String, Integer>>() {
-            private final Set<Flag<?>> flags = WorldGuardExtraFlagsPlugin.this.getPluginFlags();
-
-            @Override
-            public Map<String, Integer> call() throws Exception {
-                Map<Flag<?>, Integer> valueMap = this.flags.stream().collect(Collectors.toMap((v) -> v, (v) -> 0));
-
-                WorldGuardExtraFlagsPlugin.this.getWorldGuardCommunicator().getRegionContainer().getLoaded().forEach((m) -> {
-                    m.getRegions().values().forEach((r) -> {
-                        r.getFlags().keySet().forEach((f) -> {
-                            valueMap.computeIfPresent(f, (k, v) -> v + 1);
-                        });
-                    });
-                });
-
-                return valueMap.entrySet().stream().collect(Collectors.toMap((v) -> v.getKey().getName(), (v) -> v.getValue()));
-            }
-        }));
     }
 
     private Set<Flag<?>> getPluginFlags() {
